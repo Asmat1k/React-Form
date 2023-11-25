@@ -81,7 +81,9 @@ function FormHook() {
     resolver: yupResolver(schema),
   });
   const navigate = useNavigate();
-  const { errors } = formState;
+  const { errors, isDirty, isValid } = formState;
+
+  console.log(isDirty, isValid);
 
   const { country } = useAppSelector((state) => state.userReducer);
   const dispatch = useDispatch();
@@ -196,7 +198,9 @@ function FormHook() {
           </div>
         </div>
 
-        <button className={styles.btn}>Submit</button>
+        <button disabled={!isDirty || !isValid} className={styles.btn}>
+          Submit
+        </button>
       </form>
     </>
   );
