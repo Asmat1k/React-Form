@@ -13,6 +13,7 @@ interface MyForm {
   radio: string;
   checkbox: boolean;
   file: FileList;
+  country: string;
 }
 
 const schema = yup.object({
@@ -67,6 +68,7 @@ const schema = yup.object({
         Array.from(files).every((file) => file.size <= 2_000_000)
     )
     .required('File is required'),
+  country: yup.string().required('Country is required'),
 });
 
 function FormHook() {
@@ -165,6 +167,16 @@ function FormHook() {
             <div className={styles.error}>{errors.file?.message}</div>
           </div>
         </div>
+
+        <div className={styles.formControl}>
+          <label htmlFor="country">Country:</label>
+          <div className={styles.area}>
+            {' '}
+            <select id="country" {...register('country')} />
+            <div className={styles.error}>{errors.country?.message}</div>
+          </div>
+        </div>
+
         <button className={styles.btn}>Submit</button>
       </form>
     </>
