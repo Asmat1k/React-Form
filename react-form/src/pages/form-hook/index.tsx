@@ -1,9 +1,5 @@
-function MainPage() {
-  return (
-    <>
-      <div>Main Page</div>
-    </>
-  );
+function FormHook() {
+  return <div>Form Hook</div>;
 }
 
-export default MainPage;
+export default FormHook;
