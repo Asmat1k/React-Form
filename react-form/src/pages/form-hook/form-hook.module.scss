@@ -94,3 +94,23 @@
   text-align: left;
   max-width: 100%;
 }
+
+@media (max-width: 405px) {
+  .form {
+    max-width: 320px;
+    padding: 20px;
+    .formControl {
+      height: 40px;
+      gap: 10px;
+      label {
+        width: 50%;
+      }
+      .area {
+        height: 25px;
+      }
+    }
+    .picker {
+      height: 40px;
+    }
+  }
+}

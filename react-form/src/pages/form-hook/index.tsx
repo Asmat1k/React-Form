@@ -54,7 +54,7 @@ const schema = yup.object({
   radio: yup.string().required('Pick a gender!'),
   checkbox: yup
     .boolean()
-    .oneOf([true], 'You need to accept the terms and conditions')
+    .oneOf([true], 'Accept the terms and conditions')
     .required('This is required'),
   file: yup
     .mixed<FileList>()
@@ -95,7 +95,13 @@ function FormHook() {
           <label htmlFor="age">Age:</label>
           <div className={styles.area}>
             {' '}
-            <input type="number" id="age" {...register('age')} />
+            <input
+              type="number"
+              id="age"
+              min={0}
+              max={120}
+              {...register('age')}
+            />
             <div className={styles.error}>{errors.age?.message}</div>
           </div>
         </div>
