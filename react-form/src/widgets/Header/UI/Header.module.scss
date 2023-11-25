@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 20px 15px;
   text-transform: uppercase;
+  color: white;
   .navigation {
     .list {
       display: flex;
@@ -15,7 +16,7 @@
         a {
           font-size: 20px;
           font-weight: 600;
-          color: black;
+          color: white;
           text-decoration: none;
           transition: 0.3s;
           &:hover {

@@ -12,11 +12,14 @@ interface MyForm {
   cPassword: string;
   radio: string;
   checkbox: boolean;
-  file: string;
+  file: FileList;
 }
 
 const schema = yup.object({
-  name: yup.string().required('Username is required'),
+  name: yup
+    .string()
+    .matches(/^[A-Z]/, 'First letter should be capital')
+    .required('Username is required'),
   age: yup
     .number()
     .typeError('Age is required')
@@ -29,35 +32,23 @@ const schema = yup.object({
     .required('E-mail is required'),
   password: yup
     .string()
-    .matches(
-      /^(?=.*[a-z])(?=.{1,})/,
-      'Should conatin at least 1 lowercase letter'
-    )
-    .matches(
-      /^(?=.*[A-Z])(?=.{1,})/,
-      'Should conatin at least 1 capital letter'
-    )
+    .matches(/^(?=.*[a-z])(?=.{1,})/, 'Should be 1 lowercase letter')
+    .matches(/^(?=.*[A-Z])(?=.{1,})/, 'Should be 1 capital letter')
     .matches(
       /^(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
-      'Should conatin at least 1 special character'
+      'Should be 1 special character'
     )
-    .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should conatin at least 1 number')
+    .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should be 1 number')
     .required('Password is required'),
   cPassword: yup
     .string()
-    .matches(
-      /^(?=.*[a-z])(?=.{1,})/,
-      'Should conatin at least 1 lowercase letter'
-    )
-    .matches(
-      /^(?=.*[A-Z])(?=.{1,})/,
-      'Should conatin at least 1 capital letter'
-    )
+    .matches(/^(?=.*[a-z])(?=.{1,})/, 'Should be 1 lowercase letter')
+    .matches(/^(?=.*[A-Z])(?=.{1,})/, 'Should be 1 capital letter')
     .matches(
       /^(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
-      'Should conatin at least 1 special character'
+      'Should be 1 special character'
     )
-    .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should conatin at least 1 number')
+    .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should be 1 number')
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Confirm your password!'),
   radio: yup.string().required('Pick a gender!'),
@@ -65,11 +56,22 @@ const schema = yup.object({
     .boolean()
     .oneOf([true], 'You need to accept the terms and conditions')
     .required('This is required'),
-  file: yup.string().required('File is required'),
+  file: yup
+    .mixed<FileList>()
+    .test(
+      'fileSize',
+      'Only documents up to 2MB are permitted.',
+      (files) =>
+        !files ||
+        files.length === 0 ||
+        Array.from(files).every((file) => file.size <= 2_000_000)
+    )
+    .required('File is required'),
 });
 
 function FormHook() {
   const { register, handleSubmit, formState } = useForm<MyForm>({
+    mode: 'onChange',
     resolver: yupResolver(schema),
   });
   const { errors } = formState;
@@ -117,7 +119,7 @@ function FormHook() {
         </div>
 
         <div className={styles.formControl}>
-          <label htmlFor="cPassword">Confirm password:</label>
+          <label htmlFor="cPassword">Confirm:</label>
           <div className={styles.area}>
             {' '}
             <input type="password" id="cPassword" {...register('cPassword')} />
@@ -125,39 +127,39 @@ function FormHook() {
           </div>
         </div>
 
-        <div className={styles.formControl}>
-          <div className={styles.gender}>
-            {' '}
-            <div className={styles.gen}>
-              <label htmlFor="man">Man:</label>
-              <input type="radio" id="man" {...register('radio')} />
-            </div>
-            <div className={styles.gen}>
-              <label htmlFor="woman">Woman:</label>
-              <input type="radio" id="woman" {...register('radio')} />
-            </div>
+        <div className={styles.picker}>
+          {' '}
+          <div className={styles.gen}>
+            <label htmlFor="man">Man:</label>
+            <input type="radio" id="man" {...register('radio')} />
+            <label htmlFor="woman">Woman:</label>
+            <input type="radio" id="woman" {...register('radio')} />
           </div>
           <div className={styles.error}>{errors.radio?.message}</div>
         </div>
 
-        <div className={styles.formControl}>
-          <label htmlFor="TC">T/C:</label>
+        <div className={styles.picker}>
           <div className={styles.area}>
-            {' '}
+            <label htmlFor="TC">T/C:</label>
             <input type="checkbox" id="TC" {...register('checkbox')} />
-            <div className={styles.error}>{errors.checkbox?.message}</div>
           </div>
+          <div className={styles.error}>{errors.checkbox?.message}</div>
         </div>
 
         <div className={styles.formControl}>
           <label htmlFor="img">Image:</label>
           <div className={styles.area}>
             {' '}
-            <input type="image" id="img" {...register('file')} />
+            <input
+              type="file"
+              accept=".png, .jpeg"
+              id="img"
+              {...register('file')}
+            />
             <div className={styles.error}>{errors.file?.message}</div>
           </div>
         </div>
-        <button>Submit</button>
+        <button className={styles.btn}>Submit</button>
       </form>
     </>
   );
