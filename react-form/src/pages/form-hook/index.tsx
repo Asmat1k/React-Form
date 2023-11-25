@@ -6,7 +6,7 @@ import styles from './form-hook.module.scss';
 
 interface MyForm {
   name: string;
-  age: string;
+  age: number;
   email: string;
   password: string;
   cPassword: string;
@@ -17,13 +17,32 @@ interface MyForm {
 
 const schema = yup.object({
   name: yup.string().required('Username is required'),
-  age: yup.string().required('Age is required'),
+  age: yup
+    .number()
+    .typeError('Age is required')
+    .positive()
+    .integer()
+    .required('Age is required'),
   email: yup
     .string()
     .email('E-mail format is not valid!')
     .required('E-mail is required'),
-  password: yup.string().required('Password is required'),
-  cPassword: yup.string().required('Confirm your password!'),
+  password: yup
+    .string()
+    .min(1, 'Too little')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=)(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
+      'Must Contain at least 1 character, One Uppercase, One Lowercase and One Special Case Character'
+    )
+    .required('Password is required'),
+  cPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=)(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
+      'Must Contain at least 1 character, One Uppercase, One Lowercase and One Special Case Character'
+    )
+    .required('Confirm your password!'),
   radio: yup.string().required('Pick a gender!'),
   checkbox: yup.string().required('This is required'),
   file: yup.string().required('File is required'),
