@@ -1,15 +1,23 @@
 .container {
-  max-width: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  max-width: 90vw;
+  width: 100%;
   margin: 0 auto;
   padding: 20px 15px;
   text-transform: uppercase;
-  color: white;
   .navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .list {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      justify-content: center;
+      gap: 15px;
+      padding: 0;
       .item {
         list-style: none;
         text-decoration: none;
