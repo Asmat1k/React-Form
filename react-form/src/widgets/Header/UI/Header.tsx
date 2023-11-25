@@ -8,27 +8,25 @@ const setActive = ({ isActive }: { isActive: boolean }) =>
 export function Header() {
   return (
     <header className={styles.container}>
-      <div className={styles.wrapper}>
-        <nav className={styles.navigation}>
-          <ul className={styles.list}>
-            <li className={styles.item}>
-              <NavLink className={setActive} to="/">
-                Home
-              </NavLink>
-            </li>
-            <li className={styles.item}>
-              <NavLink className={setActive} to="/form1">
-                Form1
-              </NavLink>
-            </li>
-            <li className={styles.item}>
-              <NavLink className={setActive} to="/form2">
-                Form2
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <nav className={styles.navigation}>
+        <ul className={styles.list}>
+          <li className={styles.item}>
+            <NavLink className={setActive} to="/">
+              Main
+            </NavLink>
+          </li>
+          <li className={styles.item}>
+            <NavLink className={setActive} to="/form1">
+              Form-1
+            </NavLink>
+          </li>
+          <li className={styles.item}>
+            <NavLink className={setActive} to="/form2">
+              Form-2
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
     </header>
   );
 }

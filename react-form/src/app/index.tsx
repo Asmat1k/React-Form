@@ -1,8 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
+
+import { BaseLayout } from './baseLayout';
 import Main from '../pages/main';
 import FormUncontrolled from '../pages/form-uncontrolled';
 import FormHook from '../pages/form-hook';
-import { BaseLayout } from './baseLayout';
+
+import './styles/index.scss';
 
 function App() {
   return (
