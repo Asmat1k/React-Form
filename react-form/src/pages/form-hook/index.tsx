@@ -11,7 +11,7 @@ interface MyForm {
   password: string;
   cPassword: string;
   radio: string;
-  checkbox: string;
+  checkbox: boolean;
   file: string;
 }
 
@@ -29,22 +29,42 @@ const schema = yup.object({
     .required('E-mail is required'),
   password: yup
     .string()
-    .min(1, 'Too little')
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=)(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
-      'Must Contain at least 1 character, One Uppercase, One Lowercase and One Special Case Character'
+      /^(?=.*[a-z])(?=.{1,})/,
+      'Should conatin at least 1 lowercase letter'
     )
+    .matches(
+      /^(?=.*[A-Z])(?=.{1,})/,
+      'Should conatin at least 1 capital letter'
+    )
+    .matches(
+      /^(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
+      'Should conatin at least 1 special character'
+    )
+    .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should conatin at least 1 number')
     .required('Password is required'),
   cPassword: yup
     .string()
-    .oneOf([yup.ref('password')], 'Passwords must match')
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=)(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
-      'Must Contain at least 1 character, One Uppercase, One Lowercase and One Special Case Character'
+      /^(?=.*[a-z])(?=.{1,})/,
+      'Should conatin at least 1 lowercase letter'
     )
+    .matches(
+      /^(?=.*[A-Z])(?=.{1,})/,
+      'Should conatin at least 1 capital letter'
+    )
+    .matches(
+      /^(?=.*[!@#\\$%\\^&\\*])(?=.{1,})/,
+      'Should conatin at least 1 special character'
+    )
+    .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should conatin at least 1 number')
+    .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Confirm your password!'),
   radio: yup.string().required('Pick a gender!'),
-  checkbox: yup.string().required('This is required'),
+  checkbox: yup
+    .boolean()
+    .oneOf([true], 'You need to accept the terms and conditions')
+    .required('This is required'),
   file: yup.string().required('File is required'),
 });
 
@@ -106,12 +126,18 @@ function FormHook() {
         </div>
 
         <div className={styles.formControl}>
-          <label htmlFor="gender">Gender:</label>
-          <div className={styles.area}>
+          <div className={styles.gender}>
             {' '}
-            <input type="radio" id="gender" {...register('radio')} />
-            <div className={styles.error}>{errors.radio?.message}</div>
+            <div className={styles.gen}>
+              <label htmlFor="man">Man:</label>
+              <input type="radio" id="man" {...register('radio')} />
+            </div>
+            <div className={styles.gen}>
+              <label htmlFor="woman">Woman:</label>
+              <input type="radio" id="woman" {...register('radio')} />
+            </div>
           </div>
+          <div className={styles.error}>{errors.radio?.message}</div>
         </div>
 
         <div className={styles.formControl}>
