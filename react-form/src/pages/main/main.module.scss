@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    .link {
+      font-size: 40px;
+      color: black;
+      text-transform: uppercase;
+      text-decoration: none;
+
+      transition: 0.4s;
+      &:first-child:hover {
+        transform: translateX(-50px) scale(1.1);
+      }
+      &:last-child:hover {
+        transform: translateX(50px) scale(1.1);
+      }
+      &:first-child:active {
+        transform: scale(0.9);
+      }
+      &:last-child:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+}

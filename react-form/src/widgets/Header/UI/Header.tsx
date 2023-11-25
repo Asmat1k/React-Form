@@ -11,13 +11,13 @@ export function Header() {
       <nav className={styles.navigation}>
         <ul className={styles.list}>
           <li className={styles.item}>
-            <NavLink className={setActive} to="/">
-              Main
+            <NavLink className={setActive} to="/form1">
+              Form-1
             </NavLink>
           </li>
           <li className={styles.item}>
-            <NavLink className={setActive} to="/form1">
-              Form-1
+            <NavLink className={setActive} to="/">
+              Main
             </NavLink>
           </li>
           <li className={styles.item}>
