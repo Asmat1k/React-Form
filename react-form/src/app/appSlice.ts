@@ -7,11 +7,12 @@ interface DefaultState {
     email: string;
     password: string;
     cPassword: string;
-    radio: string;
+    gender: string;
     checkbox: boolean;
     file: FileList | null;
     country: string;
   };
+  country: Array<string>;
 }
 
 const initialState: DefaultState = {
@@ -21,11 +22,20 @@ const initialState: DefaultState = {
     email: '',
     password: '',
     cPassword: '',
-    radio: '',
+    gender: '',
     checkbox: false,
     file: null,
     country: '',
   },
+  country: [
+    'Russia',
+    'Republic of Belarus',
+    'Ukraine',
+    'USA',
+    'France',
+    'Turkey',
+    'Other...',
+  ],
 };
 
 export const dataSlice = createSlice({

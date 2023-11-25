@@ -6,6 +6,7 @@ import styles from './form-hook.module.scss';
 import { useDispatch } from 'react-redux';
 import { updateData } from '../../app/appSlice';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../app/appHooks';
 
 interface MyForm {
   name: string;
@@ -13,7 +14,7 @@ interface MyForm {
   email: string;
   password: string;
   cPassword: string;
-  radio: string;
+  gender: string;
   checkbox: boolean;
   file: FileList;
   country: string;
@@ -55,7 +56,7 @@ const schema = yup.object({
     .matches(/^(?=.*[0-9])(?=.{1,})/, 'Should be 1 number')
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Confirm your password!'),
-  radio: yup.string().required('Pick a gender!'),
+  gender: yup.string().required('Pick a gender!'),
   checkbox: yup
     .boolean()
     .oneOf([true], 'Accept the terms and conditions')
@@ -82,11 +83,13 @@ function FormHook() {
   const navigate = useNavigate();
   const { errors } = formState;
 
+  const { country } = useAppSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const updateDataState = (obj: MyForm) => dispatch(updateData(obj));
 
   const submit: SubmitHandler<MyForm> = (data) => {
     updateDataState(data);
+    console.log(data.file);
     reset();
     setTimeout(() => {
       navigate('/');
@@ -149,12 +152,13 @@ function FormHook() {
         <div className={styles.picker}>
           {' '}
           <div className={styles.gen}>
-            <label htmlFor="man">Man:</label>
-            <input type="radio" id="man" {...register('radio')} />
-            <label htmlFor="woman">Woman:</label>
-            <input type="radio" id="woman" {...register('radio')} />
+            <label htmlFor="gender">Gender:</label>
+            <select id="gender" {...register('gender')}>
+              <option>Man</option>
+              <option>Woman</option>
+            </select>
           </div>
-          <div className={styles.error}>{errors.radio?.message}</div>
+          <div className={styles.error}>{errors.gender?.message}</div>
         </div>
 
         <div className={styles.picker}>
@@ -184,9 +188,9 @@ function FormHook() {
           <div className={styles.area}>
             {' '}
             <select id="country" {...register('country')}>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+              {country.map((item, index) => {
+                return <option key={index}>{item}</option>;
+              })}
             </select>
             <div className={styles.error}>{errors.country?.message}</div>
           </div>
