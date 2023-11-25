@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 
 import styles from './main.module.scss';
+import { useAppSelector } from '../../app/appHooks';
 
 function Main() {
+  const { data } = useAppSelector((state) => state.userReducer);
+  console.log(data);
   return (
     <section className={styles.container}>
       <div className={styles.wrapper}>

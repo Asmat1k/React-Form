@@ -3,6 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import styles from './form-hook.module.scss';
+import { useDispatch } from 'react-redux';
+import { updateData } from '../../app/appSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface MyForm {
   name: string;
@@ -72,14 +75,22 @@ const schema = yup.object({
 });
 
 function FormHook() {
-  const { register, handleSubmit, formState } = useForm<MyForm>({
+  const { register, handleSubmit, formState, reset } = useForm<MyForm>({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
+  const navigate = useNavigate();
   const { errors } = formState;
 
+  const dispatch = useDispatch();
+  const updateDataState = (obj: MyForm) => dispatch(updateData(obj));
+
   const submit: SubmitHandler<MyForm> = (data) => {
-    console.log(data);
+    updateDataState(data);
+    reset();
+    setTimeout(() => {
+      navigate('/');
+    }, 500);
   };
 
   return (
@@ -172,7 +183,11 @@ function FormHook() {
           <label htmlFor="country">Country:</label>
           <div className={styles.area}>
             {' '}
-            <select id="country" {...register('country')} />
+            <select id="country" {...register('country')}>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
             <div className={styles.error}>{errors.country?.message}</div>
           </div>
         </div>
