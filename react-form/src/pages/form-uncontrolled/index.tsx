@@ -1,44 +1,22 @@
+import { useRef, useState } from 'react';
 import { FormFileds } from '../../shared/interfaces/form-fields';
 
 import styles from './form-uncontrolled.module.scss';
+import validateFields from '../../features/formValidation';
 
 function FormUncontrolled() {
-  let errors: Record<string, string> = {};
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement & FormFileds> = (
     event
   ) => {
     event.preventDefault();
-    const form = event?.currentTarget;
-    const { name, age, email, password1, password2 } = form;
-
-    errors = {};
-
-    if (!/^[A-Z]/.test(name.value)) {
-      errors.name = 'Name should start with an uppercase letter';
+    const newErrors = validateFields(event);
+    if (!(fileInputRef.current && fileInputRef.current!.files!.length > 0)) {
+      newErrors.img = 'File is required';
     }
-
-    if (parseInt(age.value, 10) < 0) {
-      errors.age = 'Age should be a non-negative number';
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-      errors.email = 'Invalid email format';
-    }
-
-    if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})/.test(
-        password1.value
-      )
-    ) {
-      errors.password1 =
-        'Password should contain at least 1 number, 1 lowercase letter, 1 uppercase letter, and 1 special character';
-    }
-
-    if (password1.value !== password2.value) {
-      errors.password2 = 'Passwords do not match';
-    }
-    console.log(errors.password1);
+    setErrors(newErrors);
   };
 
   return (
@@ -55,6 +33,7 @@ function FormUncontrolled() {
         <label htmlFor="age">Age:</label>
         <div className={styles.area}>
           <input type="number" id="age" name="age" />
+          {errors.age && <div className={styles.error}>{errors.age}</div>}
         </div>
       </div>
 
@@ -62,20 +41,27 @@ function FormUncontrolled() {
         <label htmlFor="email">E-mail:</label>
         <div className={styles.area}>
           <input type="email" id="email" name="email" />
+          {errors.email && <div className={styles.error}>{errors.email}</div>}
         </div>
       </div>
 
       <div className={styles.formControl}>
-        <label htmlFor="password1">Password:</label>
+        <label htmlFor="password">Password:</label>
         <div className={styles.area}>
-          <input type="password" id="password1" name="password1" />
+          <input type="password" id="password" name="password" />
+          {errors.password && (
+            <div className={styles.error}>{errors.password}</div>
+          )}
         </div>
       </div>
 
       <div className={styles.formControl}>
-        <label htmlFor="password2">Confirm:</label>
+        <label htmlFor="cPassword">Confirm:</label>
         <div className={styles.area}>
-          <input type="password" id="password2" name="password2" />
+          <input type="password" id="cPassword" name="cPassword" />
+          {errors.cPassword && (
+            <div className={styles.error}>{errors.cPassword}</div>
+          )}
         </div>
       </div>
 
@@ -87,6 +73,7 @@ function FormUncontrolled() {
             <option>Woman</option>
           </select>
         </div>
+        {errors.gender && <div className={styles.error}>{errors.gender}</div>}
       </div>
 
       <div className={styles.picker}>
@@ -94,12 +81,20 @@ function FormUncontrolled() {
           <label htmlFor="TC">T/C:</label>
           <input type="checkbox" id="TC" />
         </div>
+        {errors.TC && <div className={styles.error}>{errors.TC}</div>}
       </div>
 
       <div className={styles.formControl}>
-        <label htmlFor="picture">Image:</label>
+        <label htmlFor="img">Image:</label>
         <div className={styles.area}>
-          <input type="file" id="picture" name="picture" accept=".png, .jpeg" />
+          <input
+            type="file"
+            id="img"
+            name="img"
+            accept=".png, .jpeg"
+            ref={fileInputRef}
+          />
+          {errors.img && <div className={styles.error}>{errors.img}</div>}
         </div>
       </div>
 
@@ -111,6 +106,9 @@ function FormUncontrolled() {
               Select Country
             </option>
           </select>
+          {errors.country && (
+            <div className={styles.error}>{errors.country}</div>
+          )}
         </div>
       </div>
       <button type="submit">Submit</button>

@@ -5,7 +5,7 @@ export interface FormFileds {
   password: HTMLInputElement;
   cPassword: HTMLInputElement;
   gender: HTMLInputElement;
-  checkbox: HTMLInputElement;
+  TC: HTMLInputElement;
   file: HTMLInputElement;
   country: HTMLInputElement;
 }
