@@ -1,24 +1,15 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import styles from './form-hook.module.scss';
-import { useDispatch } from 'react-redux';
-import { updateData } from '../../app/appSlice';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../app/appHooks';
 
-interface MyForm {
-  name: string;
-  age: number;
-  email: string;
-  password: string;
-  cPassword: string;
-  gender: string;
-  checkbox: boolean;
-  file: FileList;
-  country: string;
-}
+import { updateData } from '../../app/appSlice';
+import { useAppSelector } from '../../app/appHooks';
+import MyForm from '../../shared/interfaces/form-fields-types';
 
 const schema = yup.object({
   name: yup

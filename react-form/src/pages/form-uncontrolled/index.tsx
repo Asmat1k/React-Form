@@ -1,22 +1,56 @@
 import { useRef, useState } from 'react';
+import { useAppSelector } from '../../app/appHooks';
+import { useDispatch } from 'react-redux';
 import { FormFileds } from '../../shared/interfaces/form-fields';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './form-uncontrolled.module.scss';
 import validateFields from '../../features/formValidation';
 
+import { updateData } from '../../app/appSlice';
+import { MyFormTest } from '../../shared/interfaces/form-fields-types';
+
 function FormUncontrolled() {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const { country } = useAppSelector((state) => state.userReducer);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const updateDataState = (obj: MyFormTest) => dispatch(updateData(obj));
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement & FormFileds> = (
     event
   ) => {
     event.preventDefault();
     const newErrors = validateFields(event);
-    if (!(fileInputRef.current && fileInputRef.current!.files!.length > 0)) {
+    if (!(fileRef.current && fileRef.current!.files!.length > 0)) {
       newErrors.img = 'File is required';
     }
     setErrors(newErrors);
+
+    const isValidToUpdate = !Object.keys(newErrors).length;
+    if (isValidToUpdate) {
+      const form = event?.currentTarget;
+      const { name, age, email, password, TC, cPassword, gender, country } =
+        form;
+      const newObj = {
+        name: name.value,
+        age: +age.value,
+        email: email.value,
+        password: password.value,
+        cPassword: cPassword.value,
+        gender: gender.value,
+        checkbox: TC.checked,
+        file: null,
+        country: country.value,
+      };
+      updateDataState(newObj);
+
+      setTimeout(() => {
+        navigate('/');
+      }, 500);
+    }
   };
 
   return (
@@ -92,7 +126,7 @@ function FormUncontrolled() {
             id="img"
             name="img"
             accept=".png, .jpeg"
-            ref={fileInputRef}
+            ref={fileRef}
           />
           {errors.img && <div className={styles.error}>{errors.img}</div>}
         </div>
@@ -102,9 +136,9 @@ function FormUncontrolled() {
         <label htmlFor="country">Country:</label>
         <div className={styles.area}>
           <select id="country" name="country">
-            <option value="" disabled>
-              Select Country
-            </option>
+            {country.map((item, index) => {
+              return <option key={index}>{item}</option>;
+            })}
           </select>
           {errors.country && (
             <div className={styles.error}>{errors.country}</div>
