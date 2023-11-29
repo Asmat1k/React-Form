@@ -3,12 +3,42 @@ import { FormFileds } from '../../shared/interfaces/form-fields';
 import styles from './form-uncontrolled.module.scss';
 
 function FormUncontrolled() {
+  let errors: Record<string, string> = {};
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement & FormFileds> = (
     event
   ) => {
     event.preventDefault();
     const form = event?.currentTarget;
-    console.log(Object.values(form));
+    const { name, age, email, password1, password2 } = form;
+
+    errors = {};
+
+    if (!/^[A-Z]/.test(name.value)) {
+      errors.name = 'Name should start with an uppercase letter';
+    }
+
+    if (parseInt(age.value, 10) < 0) {
+      errors.age = 'Age should be a non-negative number';
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+      errors.email = 'Invalid email format';
+    }
+
+    if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})/.test(
+        password1.value
+      )
+    ) {
+      errors.password1 =
+        'Password should contain at least 1 number, 1 lowercase letter, 1 uppercase letter, and 1 special character';
+    }
+
+    if (password1.value !== password2.value) {
+      errors.password2 = 'Passwords do not match';
+    }
+    console.log(errors.password1);
   };
 
   return (
@@ -17,6 +47,7 @@ function FormUncontrolled() {
         <label htmlFor="name">Name:</label>
         <div className={styles.area}>
           <input type="text" id="name" name="name" />
+          {errors.name && <div className={styles.error}>{errors.name}</div>}
         </div>
       </div>
 
