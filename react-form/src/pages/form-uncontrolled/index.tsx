@@ -9,7 +9,7 @@ import styles from './form-uncontrolled.module.scss';
 
 import { updateData } from '../../app/appSlice';
 import { MyFormTest } from '../../shared/interfaces/form-fields-types';
-import { schema } from '../../shared/yup/yup-validation';
+import { schema } from '../../features/yup/yup-validation';
 
 function FormUncontrolled() {
   const fileRef = useRef<HTMLInputElement | null>(null);

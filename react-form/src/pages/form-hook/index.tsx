@@ -9,7 +9,7 @@ import styles from './form-hook.module.scss';
 import { updateData } from '../../app/appSlice';
 import { useAppSelector } from '../../app/appHooks';
 import MyForm from '../../shared/interfaces/form-fields-types';
-import { schema } from '../../shared/yup/yup-validation';
+import { schema } from '../../features/yup/yup-validation';
 
 function FormHook() {
   const { register, handleSubmit, formState, reset } = useForm<MyForm>({
