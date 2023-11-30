@@ -7,6 +7,7 @@ export default interface MyForm {
   gender: string;
   checkbox: boolean;
   file: FileList;
+  fileBase64?: string;
   country: string;
 }
 
@@ -18,6 +19,6 @@ export interface MyFormTest {
   cPassword: string;
   gender: string;
   checkbox: boolean;
-  file: FileList | null;
+  file: string | null;
   country: string;
 }

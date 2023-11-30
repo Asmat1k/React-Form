@@ -8,7 +8,9 @@ import styles from './form-hook.module.scss';
 
 import { updateData } from '../../app/appSlice';
 import { useAppSelector } from '../../app/appHooks';
+
 import MyForm from '../../shared/interfaces/form-fields-types';
+
 import { schema } from '../../features/yup/yup-validation';
 
 function FormHook() {
@@ -23,8 +25,15 @@ function FormHook() {
   const dispatch = useDispatch();
   const updateDataState = (obj: MyForm) => dispatch(updateData(obj));
 
-  const submit: SubmitHandler<MyForm> = (data) => {
-    updateDataState(data);
+  const submit: SubmitHandler<MyForm> = async (data) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(data.file[0]);
+    reader.onload = function () {
+      const fileBase64 = reader.result as string;
+      const newData = { ...data, fileBase64 };
+      updateDataState(newData);
+    };
+
     reset();
 
     setTimeout(() => {

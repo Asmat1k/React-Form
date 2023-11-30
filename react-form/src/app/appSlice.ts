@@ -9,7 +9,7 @@ interface DefaultState {
     cPassword: string;
     gender: string;
     checkbox: boolean;
-    file: FileList | null;
+    fileBase64: string;
     country: string;
   };
   country: Array<string>;
@@ -24,7 +24,7 @@ const initialState: DefaultState = {
     cPassword: '',
     gender: '',
     checkbox: false,
-    file: null,
+    fileBase64: '',
     country: '',
   },
   country: [
