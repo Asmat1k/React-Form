@@ -3,12 +3,13 @@ import { useAppSelector } from '../../app/appHooks';
 import { useDispatch } from 'react-redux';
 import { FormFileds } from '../../shared/interfaces/form-fields';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 
 import styles from './form-uncontrolled.module.scss';
-import validateFields from '../../features/formValidation';
 
 import { updateData } from '../../app/appSlice';
 import { MyFormTest } from '../../shared/interfaces/form-fields-types';
+import { schema } from '../../shared/yup/yup-validation';
 
 function FormUncontrolled() {
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -19,18 +20,39 @@ function FormUncontrolled() {
   const navigate = useNavigate();
   const updateDataState = (obj: MyFormTest) => dispatch(updateData(obj));
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement & FormFileds> = (
-    event
-  ) => {
+  const handleSubmit: React.FormEventHandler<
+    HTMLFormElement & FormFileds
+  > = async (event) => {
     event.preventDefault();
-    const newErrors = validateFields(event);
-    if (!(fileRef.current && fileRef.current!.files!.length > 0)) {
-      newErrors.img = 'File is required';
-    }
-    setErrors(newErrors);
 
-    const isValidToUpdate = !Object.keys(newErrors).length;
-    if (isValidToUpdate) {
+    const formData = new FormData(event.currentTarget);
+    const data: MyFormTest = {
+      name: formData.get('name') as string,
+      age: +formData.get('age')!,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      cPassword: formData.get('cPassword') as string,
+      gender: formData.get('gender') as string,
+      checkbox: formData.get('TC') === 'on',
+      file: null,
+      country: formData.get('country') as string,
+    };
+
+    try {
+      await schema.validate(data, { abortEarly: false });
+      setErrors({});
+    } catch (validationError) {
+      if (validationError instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {};
+        validationError.inner.forEach((error) => {
+          newErrors[error.path!] = error.message;
+        });
+        setErrors(newErrors);
+      }
+      return;
+    }
+
+    if (!errors) {
       const form = event?.currentTarget;
       const { name, age, email, password, TC, cPassword, gender, country } =
         form;
