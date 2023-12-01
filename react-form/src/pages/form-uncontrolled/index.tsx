@@ -35,7 +35,7 @@ function FormUncontrolled() {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       cPassword: formData.get('cPassword') as string,
-      gender: formData.get('gender'),
+      gender: formData.get('gender') as string,
       checkbox: formData.get('TC') === 'on',
       file: file,
       country: formData.get('country') as string,
@@ -55,20 +55,13 @@ function FormUncontrolled() {
       return;
     }
 
-    const newObj = {
-      name: formData.get('name') as string,
-      age: +formData.get('age')!,
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-      cPassword: formData.get('cPassword') as string,
-      gender: formData.get('gender') as string,
-      checkbox: formData.get('TC') === 'on',
-      file: file,
-      fileBase64: 'a',
-      country: formData.get('country') as string,
+    const reader = new FileReader();
+    reader.readAsDataURL(file[0]);
+    reader.onload = function () {
+      const fileBase64 = reader.result as string;
+      const newData = { ...data, fileBase64 };
+      updateDataState(newData);
     };
-
-    updateDataState(newObj);
 
     setTimeout(() => {
       navigate('/');
