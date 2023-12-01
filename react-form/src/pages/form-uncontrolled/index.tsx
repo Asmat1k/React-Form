@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import styles from './form-uncontrolled.module.scss';
 
 import { updateData } from '../../app/appSlice';
-import { MyFormTest } from '../../shared/interfaces/form-fields-types';
+import MyForm from '../../shared/interfaces/form-fields-types';
 import { schema } from '../../features/yup/yup-validation';
 
 function FormUncontrolled() {
@@ -18,7 +18,7 @@ function FormUncontrolled() {
   const { country } = useAppSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const updateDataState = (obj: MyFormTest) => dispatch(updateData(obj));
+  const updateDataState = (obj: MyForm) => dispatch(updateData(obj));
 
   const handleSubmit: React.FormEventHandler<
     HTMLFormElement & FormFileds
@@ -26,15 +26,18 @@ function FormUncontrolled() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const data: MyFormTest = {
+
+    const file = fileRef.current!.files!;
+
+    const data = {
       name: formData.get('name') as string,
       age: +formData.get('age')!,
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       cPassword: formData.get('cPassword') as string,
-      gender: formData.get('gender') as string,
+      gender: formData.get('gender'),
       checkbox: formData.get('TC') === 'on',
-      file: null,
+      file: file,
       country: formData.get('country') as string,
     };
 
@@ -52,27 +55,24 @@ function FormUncontrolled() {
       return;
     }
 
-    if (!errors) {
-      const form = event?.currentTarget;
-      const { name, age, email, password, TC, cPassword, gender, country } =
-        form;
-      const newObj = {
-        name: name.value,
-        age: +age.value,
-        email: email.value,
-        password: password.value,
-        cPassword: cPassword.value,
-        gender: gender.value,
-        checkbox: TC.checked,
-        file: null,
-        country: country.value,
-      };
-      updateDataState(newObj);
+    const newObj = {
+      name: formData.get('name') as string,
+      age: +formData.get('age')!,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      cPassword: formData.get('cPassword') as string,
+      gender: formData.get('gender') as string,
+      checkbox: formData.get('TC') === 'on',
+      file: file,
+      fileBase64: 'a',
+      country: formData.get('country') as string,
+    };
 
-      setTimeout(() => {
-        navigate('/');
-      }, 500);
-    }
+    updateDataState(newObj);
+
+    setTimeout(() => {
+      navigate('/');
+    }, 500);
   };
 
   return (
@@ -124,7 +124,7 @@ function FormUncontrolled() {
       <div className={styles.picker}>
         <div className={styles.gen}>
           <label htmlFor="gender">Gender:</label>
-          <select id="gender">
+          <select name="gender" id="gender">
             <option>Man</option>
             <option>Woman</option>
           </select>
@@ -135,9 +135,11 @@ function FormUncontrolled() {
       <div className={styles.picker}>
         <div className={styles.area}>
           <label htmlFor="TC">T/C:</label>
-          <input type="checkbox" id="TC" />
+          <input name="TC" type="checkbox" id="TC" />
         </div>
-        {errors.TC && <div className={styles.error}>{errors.TC}</div>}
+        {errors.checkbox && (
+          <div className={styles.error}>{errors.checkbox}</div>
+        )}
       </div>
 
       <div className={styles.formControl}>
@@ -150,7 +152,7 @@ function FormUncontrolled() {
             accept=".png, .jpeg"
             ref={fileRef}
           />
-          {errors.img && <div className={styles.error}>{errors.img}</div>}
+          {errors.file && <div className={styles.error}>{errors.file}</div>}
         </div>
       </div>
 

@@ -11,7 +11,7 @@ export default interface MyForm {
   country: string;
 }
 
-export interface MyFormTest {
+export interface MyUncForm {
   name: string;
   age: number;
   email: string;
@@ -19,6 +19,7 @@ export interface MyFormTest {
   cPassword: string;
   gender: string;
   checkbox: boolean;
-  file: string | null;
+  file: File;
+  fileBase64?: string;
   country: string;
 }
