@@ -55,6 +55,8 @@ function FormUncontrolled() {
       return;
     }
 
+    if (file.length <= 0) setErrors({ file: 'file is required' });
+
     const reader = new FileReader();
     reader.readAsDataURL(file[0]);
     reader.onload = function () {
