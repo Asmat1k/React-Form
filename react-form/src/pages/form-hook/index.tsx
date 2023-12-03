@@ -12,18 +12,23 @@ import { useAppSelector } from '../../app/appHooks';
 import MyForm from '../../shared/interfaces/form-fields-types';
 
 import { schema } from '../../features/yup/yup-validation';
+import { useState } from 'react';
 
 function FormHook() {
-  const { register, handleSubmit, formState, reset } = useForm<MyForm>({
-    mode: 'onChange',
-    resolver: yupResolver(schema),
-  });
+  const { register, handleSubmit, formState, reset, getValues, setValue } =
+    useForm<MyForm>({
+      mode: 'onChange',
+      resolver: yupResolver(schema),
+    });
   const navigate = useNavigate();
   const { errors, isDirty, isValid } = formState;
 
-  const { country } = useAppSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const updateDataState = (obj: MyForm) => dispatch(updateData(obj));
+
+  const { country } = useAppSelector((state) => state.userReducer);
+  const [filteredCountries, setFilteredCountrues] = useState(country);
+  const [isOpen, setIsOpen] = useState(!!getValues('country'));
 
   const submit: SubmitHandler<MyForm> = async (data) => {
     const reader = new FileReader();
@@ -132,11 +137,39 @@ function FormHook() {
           <label htmlFor="country">Country:</label>
           <div className={styles.area}>
             {' '}
-            <select id="country" {...register('country')}>
-              {country.map((item, index) => {
-                return <option key={index}>{item}</option>;
-              })}
-            </select>
+            <input
+              type="text"
+              {...register('country')}
+              onFocus={() => setIsOpen(true)}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+
+                const newFilteredCountries = country.filter((name) =>
+                  name.toLowerCase().includes(inputValue.toLowerCase())
+                );
+
+                setValue('country', e.target.value);
+
+                setFilteredCountrues(newFilteredCountries);
+              }}
+            />
+            <ul className={styles.autocomplete}>
+              {isOpen &&
+                filteredCountries.map((item, id) => {
+                  return (
+                    <li
+                      onClick={() => {
+                        setValue('country', item);
+                        setIsOpen(false);
+                      }}
+                      key={id}
+                      className={styles.autocomplete__item}
+                    >
+                      {item}
+                    </li>
+                  );
+                })}
+            </ul>
             <div className={styles.error}>{errors.country?.message}</div>
           </div>
         </div>

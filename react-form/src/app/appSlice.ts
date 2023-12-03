@@ -34,7 +34,11 @@ const initialState: DefaultState = {
     'USA',
     'France',
     'Turkey',
-    'Other...',
+    'Japan',
+    'India',
+    'Brazil',
+    'Finland',
+    'Poland',
   ],
 };
 
