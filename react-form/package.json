@@ -1,0 +1,55 @@
+{
+  "name": "react-components",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint ./src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "fix": "prettier ./src --write",
+    "preview": "vite preview",
+    "prepare": "cd .. && husky install react-form/.husky"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@reduxjs/toolkit": "^1.9.7",
+    "@types/react-redux": "^7.1.31",
+    "localforage": "^1.10.0",
+    "match-sorter": "^6.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.20.0",
+    "sort-by": "^1.2.0",
+    "yup": "^1.3.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.0.2",
+    "prettier": "^3.0.3",
+    "sass": "^1.69.4",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "lint-staged": {
+    "**/*.{tsx,ts}": [
+      "npx prettier --write"
+    ]
+  }
+}
