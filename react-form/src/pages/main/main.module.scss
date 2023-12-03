@@ -42,6 +42,22 @@
       .title {
         text-transform: uppercase;
       }
+      .value {
+        padding: 5px 10px;
+        border-radius: 10px;
+
+        border: 2px solid transparent;
+        animation: borderFlash 1s infinite; 
+      }
     }
+  }
+}
+
+@keyframes borderFlash {
+  0%, 100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #ff0000; /* Цвет границы, например, красный (#ff0000) */
   }
 }
