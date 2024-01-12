@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  .list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    .link {
+      font-size: 40px;
+      color: white;
+      text-transform: uppercase;
+      text-decoration: none;
+
+      transition: 0.4s;
+      &:first-child:hover {
+        transform: translateX(-50px) scale(1.1);
+      }
+      &:last-child:hover {
+        transform: translateX(50px) scale(1.1);
+      }
+      &:first-child:active {
+        transform: scale(0.9);
+      }
+      &:last-child:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .data {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      .title {
+        text-transform: uppercase;
+      }
+      .value {
+        padding: 5px 10px;
+        border-radius: 10px;
+
+        border: 2px solid transparent;
+        animation: borderFlash 1s infinite;
+      }
+    }
+  }
+}
+
+@keyframes borderFlash {
+  0%,
+  100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #ff0000; /* Цвет границы, например, красный (#ff0000) */
+  }
+}
