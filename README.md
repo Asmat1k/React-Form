@@ -14,4 +14,4 @@
 - Yup
 - TypeScript
 ## Deploy
-- [link](https://react-forms-asmat1k.netlify.app/form2)
+- [link](https://react-forms-asmat1k.netlify.app)
